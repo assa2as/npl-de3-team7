@@ -1,0 +1,19 @@
+<script data-skip-moving="true" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.0/mustache.min.js"></script>
+<script data-skip-moving="true" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script data-skip-moving="true" src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+<script data-skip-moving="true">
+    requirejs.config({
+      paths: {
+        divolte: 'http://35.195.166.173:8290/divolte'
+      }
+    });
+    require(['divolte']);
+    require(['divolte'], function(divolte) {
+      console.log('ok');
+      checkout_click = function() {
+        divolte.signal("checkout", {price: document.getElementsByClassName('basket-coupon-block-total-price-current')[0].innerText});
+        return false;
+      };
+      $(document.body).on('click', '.basket-btn-checkout', checkout_click);
+    });
+</script>

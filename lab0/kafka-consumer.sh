@@ -1,0 +1,1 @@
+/usr/hdp/3.0.1.0-187/kafka/bin/kafka-console-consumer.sh --bootstrap-server 35.195.166.173:6667 --topic andrey.selivanov  --from-beginning

@@ -1,0 +1,17 @@
+{
+  "namespace": "io.divolte.examples.record",
+  "type": "record",
+  "name": "MyEventRecord",
+  "fields": [
+    { "name": "timestamp",               "type": "long" },
+    { "name": "referer",                 "type": "string"},
+    { "name": "remoteHost",              "type": "string"},
+    { "name": "eventType",               "type": ["null", "string"], "default": null },
+    { "name": "location",                "type": ["null", "string"], "default": null },
+    { "name": "localPath",               "type": ["null", "string"], "default": null },
+    { "name": "userAgent", "type": ["null", "string"], "default": null },
+    { "name": "userAgentDeviceCategory", "type": ["null", "string"], "default": null },
+    { "name": "userAgentOsFamily", "type": ["null", "string"], "default": null },   { "name": "userAgentOsVersion", "type": ["null", "string"], "default": null },
+    { "name": "price", "type": ["null", "string"], "default": null }
+  ]
+}
