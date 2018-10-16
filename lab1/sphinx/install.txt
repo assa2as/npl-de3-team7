@@ -1,0 +1,1 @@
+http://sphinxsearch.com/docs/current/installing-debian.html

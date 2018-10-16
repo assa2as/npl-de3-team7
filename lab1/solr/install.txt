@@ -1,0 +1,1 @@
+https://tecadmin.net/install-apache-solr-on-ubuntu/
