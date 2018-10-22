@@ -1,1 +1,2 @@
 https://tecadmin.net/install-apache-solr-on-ubuntu/
+pip3 install --user pysolr

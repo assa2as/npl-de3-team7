@@ -1,1 +1,55 @@
 http://sphinxsearch.com/docs/current/installing-debian.html
+pip3 install --user sphinx
+https://www.8host.com/blog/ustanovka-i-nastrojka-sphinx-v-ubuntu-16-04/
+
+sudo nano /etc/sphinxsearch/sphinx.conf
+
+index: sudo indexer --all
+reindex: sudo /usr/bin/indexer --rotate --config /etc/sphinxsearch/sphinx.conf --all
+
+start: sudo sed -i 's/START=no/START=yes/g' /etc/default/sphinxsearch
+sudo /etc/init.d/sphinxsearch start
+
+run: mysql -h0 -P9306
+
+mysql> SELECT * FROM test1 WHERE MATCH('путинов выбора'); SHOW META;
++----------+
+| id       |
++----------+
+|  3455568 |
+|  7317705 |
+|  7281469 |
+| 28337620 |
+| 32844123 |
+|  8171861 |
+| 19102396 |
+|  3570652 |
+| 20391242 |
+|  4986214 |
+| 20383587 |
+| 24167237 |
+|  7824583 |
+|  8681407 |
+| 18821192 |
+| 19388064 |
+| 20897626 |
+| 24166016 |
+| 28285156 |
+| 28289226 |
++----------+
+20 rows in set (0.01 sec)
+
++---------------+------------+
+| Variable_name | Value      |
++---------------+------------+
+| total         | 154        |
+| total_found   | 154        |
+| time          | 0.003      |
+| keyword[0]    | путин      |
+| docs[0]       | 1880       |
+| hits[0]       | 3424       |
+| keyword[1]    | выбор      |
+| docs[1]       | 89311      |
+| hits[1]       | 98873      |
++---------------+------------+
+9 rows in set (0.00 sec)

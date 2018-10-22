@@ -1,1 +1,27 @@
 https://tecadmin.net/install-postgresql-server-on-ubuntu/
+https://www.postgresql.org/ftp/pgadmin/pgadmin4/v3.4/macos/
+
+pip3 install --user py-postgresql
+
+sudo nano /etc/postgresql/9.5/main/pg_hba.conf
+
+https://eax.me/postgresql-full-text-search/
+
+из 9273625 записей 56297 дубляжи (выкинуты)
+
+postgres=# copy items from '/home/ubuntu/de3/lab1/postgres/data/items2.tsv' WITH DELIMITER E'\t';
+---
+CREATE OR REPLACE FUNCTION make_tsvector(title text, content text) RETURNS tsvector AS $$
+  BEGIN
+    RETURN (setweight(to_tsvector('russian',title),'A')) || (setweight(to_tsvector('russian',content),'B'));
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+---
+CREATE INDEX IF NOT EXISTS idx_fts_items on items
+  USING gin(make_tsvector(name,annotation));
+---
+SELECT id, name
+FROM items, plainto_tsquery('russian','путин выбор') AS q --to_tsquery('russian','путин & выбор') AS q
+WHERE make_tsvector(name,annotation) @@ q
+ORDER BY ts_rank(make_tsvector(name,annotation),q) DESC
+limit 10;
