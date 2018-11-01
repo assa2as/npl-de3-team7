@@ -29,7 +29,7 @@ def getOrders(ts=None):
     q = 'select max(location) as url, id_item, sum(total_price_product) as price, sum(item_count) as count'+\
         ' from view_orders'+\
         ' where timestamp > '+str(ts)+\
-        ' group by id_item FORMAT JSONEachRow;'
+        ' group by id_item;'
     return getJson(cl.execute(q),['url','id_item','price','count'],ts)
 def getUsers(ts=None):
     if ts == None:
@@ -39,11 +39,11 @@ def getUsers(ts=None):
             ts = int(ts)
         except:
             ts = 0
-    q = 'select max(a.location) as url, a.id_item, count(*) as count, avg(b.deep) as deep'+\
+    q = 'select a.location as url, a.id_item, count(*) as count, avg(b.deep) as deep'+\
         ' from view_users a'+\
         ' ANY LEFT JOIN (select sessionId, count(*) as deep from view_users group by sessionId) b USING sessionId'+\
         ' where a.timestamp >= '+str(ts)+\
-        ' group by a.id_item FORMAT JSONEachRow;'
+        ' group by a.location, a.id_item;'
     return getJson(cl.execute(q),['url','id_item','count','deep'],ts)
 
 app = Flask(__name__)
