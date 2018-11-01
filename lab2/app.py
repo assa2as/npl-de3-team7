@@ -39,9 +39,9 @@ def getUsers(ts=None):
             ts = int(ts)
         except:
             ts = 0
-    q = 'select a.location as url, a.id_item, count(*) as count, avg(b.deep) as deep'+\
-        ' from view_users a'+\
-        ' ANY LEFT JOIN (select sessionId, count(*) as deep from view_users group by sessionId) b USING sessionId'+\
+    q = 'select a.location, a.id_item, sum(a.total) as count, avg(b.total) as deep'+\
+        ' from (select location, id_item, sessionId, count(*) as total from view_users group by location, id_item, sessionId) a'+\
+        ' ANY LEFT JOIN (select sessionId, count(*) as total from view_users group by sessionId) b USING sessionId'+\
         ' where a.timestamp >= '+str(ts)+\
         ' group by a.location, a.id_item;'
     return getJson(cl.execute(q),['url','id_item','count','deep'],ts)
