@@ -7,7 +7,7 @@ import time
 cl = Client('35.195.166.173',port='9001')
 def getTsHourBack():
     dt = datetime.now() - timedelta(hours=1)
-    return int(time.mktime(dt.timetuple()))
+    return int(time.mktime(dt.timetuple())*1000)
 
 def getJson(recs,cols,ts):
     lst = []
@@ -39,11 +39,25 @@ def getUsers(ts=None):
             ts = int(ts)
         except:
             ts = 0
+    """
     q = 'select a.location, a.id_item, sum(a.total) as count, avg(b.total) as deep'+\
         ' from (select location, id_item, sessionId, count(*) as total from view_users group by location, id_item, sessionId) a'+\
         ' ANY LEFT JOIN (select sessionId, count(*) as total from view_users group by sessionId) b USING sessionId'+\
         ' where a.timestamp >= '+str(ts)+\
         ' group by a.location, a.id_item;'
+    """
+    q = ('select z.location, z.id_item, y.total, z.deep from'+
+        ' (select x.location, x.id_item, avg(x.deep) as deep from ('+
+        ' select a.location, a.id_item, a.sessionId, count(*) as deep'+
+        ' from (select location,id_item,sessionId,min(timestamp) as ts1 from view_users group by location, id_item, sessionId) a'+
+        ' all left join view_users b USING sessionId'+
+        ' where b.timestamp <= a.ts1'+
+        ' group by a.location, a.id_item, a.sessionId) x'+
+        ' group by x.location, x.id_item) z'+
+        ' all left join (select location, count(*) as total from view_users where timestamp >= {} group by location) y'+
+        ' USING location'+
+        ' order by z.location;').format(ts)
+        
     return getJson(cl.execute(q),['url','id_item','count','deep'],ts)
 
 app = Flask(__name__)
